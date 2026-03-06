@@ -6,6 +6,7 @@ import com.devtior.tasks.domain.mappers.TaskListMapper;
 import com.devtior.tasks.domain.services.TaskListService;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -42,5 +43,23 @@ public class TaskListController {
             @PathVariable("task_list_id") UUID id
     ){
         return taskListService.getTasklist(id).map(taskListMapper::toDto);
+    }
+
+    @PutMapping(path = "/{task_list_id}")
+    public TaskListDto updateTaskList(
+            @PathVariable("task_list_id") UUID taskListId,
+            @RequestBody TaskListDto taskListDto
+    ) {
+        TaskList updatedTaskList = taskListService.updateTaskList(
+                taskListId,
+                taskListMapper.fromDto(taskListDto)
+        );
+
+        return taskListMapper.toDto(updatedTaskList);
+    }
+
+    @DeleteMapping(path = "/{task_list_id}")
+    public void deleteTaskList(@PathVariable("task_list_id") UUID taskListId){
+        taskListService.deleteTaskList(taskListId);
     }
 }
