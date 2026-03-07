@@ -8,7 +8,9 @@ import com.devtior.tasks.domain.repositories.TaskListRepository;
 import com.devtior.tasks.domain.repositories.TaskRepository;
 import com.devtior.tasks.domain.services.TaskService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.beans.Transient;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -93,6 +95,12 @@ public class TaskServiceImpl implements TaskService {
         existingTask.setUpdatedAt(LocalDateTime.now());
 
         return taskRepository.save(existingTask);
+    }
+
+    @Transactional
+    @Override
+    public void deleteTask(UUID taskListId, UUID taskId) {
+        taskRepository.deleteByTaskListIdAndId(taskListId, taskId);
     }
 }
 
